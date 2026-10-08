@@ -1,0 +1,11 @@
+COPIA AQUI TUS LOGOS DE DEMOSTRACION
+
+logo-principal.png   -> panel de escritorio
+logo-secundario.png  -> formulario movil y agradecimiento
+
+Formatos: PNG, WebP, JPG, JPEG o SVG. Conserva el formato real del archivo.
+No necesitas borrar los SVG de ejemplo: un PNG del mismo nombre tiene prioridad.
+Si hay varias versiones: PNG > WebP > JPG > JPEG > SVG.
+
+Despues de copiar la imagen, actualiza la pagina.
+Para usar nombres distintos, cambia LOGO_PRINCIPAL y LOGO_SECUNDARIO en app.py.

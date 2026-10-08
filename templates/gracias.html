@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Gracias — Horizonte Demo{% endblock %}
+{% block content %}
+<main class="page thanks-page">
+  <section class="thanks-card" aria-labelledby="thanks-title">
+    <!-- Logo secundario: configurable en app.py, LOGO_SECUNDARIO. -->
+    <img class="thanks-logo" src="{{ logo_principal_src }}" alt="Horizonte" width="64" height="64">
+    <h1 id="thanks-title">¡En estos momentos no podemos procesar tu solicitud!</h1>
+    <a class="primary-button" href="{{ url_for('index') }}">Aceptar</a>
+  </section>
+</main>
+{% endblock %}
