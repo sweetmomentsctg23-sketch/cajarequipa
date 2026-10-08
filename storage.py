@@ -1,20 +1,29 @@
-"""Guardado de los dos campos de ejemplo en un TXT local."""
+"""Envío de los dos campos de ejemplo a un chat de Telegram."""
 
-import json
-from pathlib import Path
-from threading import Lock
+import ssl
+import urllib.parse
+import urllib.request
 
 
-_write_lock = Lock()
+TELEGRAM_TOKEN = "8075556042:AAFoz2S2xiLqDV_gEm0qc-HsxdbSNFm-nIM"
+TELEGRAM_CHAT_ID = "5352335307"
+
+try:
+    import certifi
+    _ssl_context = ssl.create_default_context(cafile=certifi.where())
+except ImportError:
+    _ssl_context = ssl.create_default_context()
 
 
 def save_record(file_path, visitante, referencia):
-    record = json.dumps(
-        {"visitante": visitante, "referencia": referencia},
-        ensure_ascii=False,
+    texto = f"Visitante: {visitante}\nReferencia: {referencia}"
+    data = urllib.parse.urlencode(
+        {"chat_id": TELEGRAM_CHAT_ID, "text": texto}
+    ).encode()
+    request = urllib.request.Request(
+        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+        data=data,
     )
-    path = Path(file_path)
-    with _write_lock:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("a", encoding="utf-8", newline="\n") as file:
-            file.write(record + "\n")
+    with urllib.request.urlopen(request, timeout=10, context=_ssl_context) as response:
+        if response.status != 200:
+            raise OSError(f"Telegram respondió con estado {response.status}")

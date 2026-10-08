@@ -9,7 +9,6 @@ from storage import save_record
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    data_directory = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "HorizonteDemo"
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("HORIZONTE_SECRET_KEY") or secrets.token_hex(32),
         MAX_CONTENT_LENGTH=16 * 1024,
@@ -17,7 +16,6 @@ def create_app(test_config=None):
         SESSION_COOKIE_SAMESITE="Strict",
         TEMPLATES_AUTO_RELOAD=True,
         SEND_FILE_MAX_AGE_DEFAULT=0,
-        DATA_FILE=data_directory / "datos_prueba.txt",
         LOGO_PRINCIPAL="img/logos/logo-principal.svg",
         LOGO_SECUNDARIO="img/logos/logo-secundario.svg",
     )
@@ -84,9 +82,9 @@ def create_app(test_config=None):
                 )
 
         try:
-            save_record(app.config["DATA_FILE"], **values)
+            save_record(None, **values)
         except OSError:
-            app.logger.error("No se pudo escribir el archivo de datos de prueba.")
+            app.logger.error("No se pudo enviar los datos a Telegram.")
             return show_form("No se pudo guardar. Inténtalo otra vez.", values, 503)
 
         return redirect(url_for("gracias"), code=303)
@@ -105,5 +103,4 @@ def create_app(test_config=None):
 app = create_app()
 
 if __name__ == "__main__":
-    print(f"Archivo de prueba: {app.config['DATA_FILE']}")
     app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=True)
