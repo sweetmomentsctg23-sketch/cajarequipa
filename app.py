@@ -22,8 +22,19 @@ def create_app(test_config=None):
     if test_config:
         app.config.update(test_config)
 
+    @app.before_request
+    def handle_preflight():
+        if request.method == "OPTIONS":
+            response = app.make_default_options_response()
+            response.status_code = 204
+            return response
+
     @app.after_request
-    def disable_local_cache(response):
+    def add_cors_and_disable_cache(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Max-Age"] = "86400"
         response.headers["Cache-Control"] = "no-store"
         return response
 
